@@ -1,0 +1,215 @@
+#:kivy 2.0.0
+#:import hex kivy.utils.get_color_from_hex
+
+<LoginScreen>:
+    name: "login"
+    id: login_screen
+
+    login_email: login_email
+    login_password: login_password
+
+    canvas.before:
+        Color:
+            rgba: hex("#FFFEF9")
+
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    FloatLayout:
+        cols: 1
+
+        # LABEL"s
+
+        AccountLabel:
+            text: "Email"
+            pos_hint: {"x": .2, "top": .83}
+            font_size: 24
+            halign: "left"
+            valign: "bottom"
+
+        AccountLabel:
+            text: "Password"
+            pos_hint: {"x": .2, "top": .69}
+            font_size: 24
+            halign: "left"
+            valign: "bottom"
+
+        AccountLabel:
+            text: "- or -"
+            pos_hint: {"x": .2, "top": .335} 
+            font_name: "fonts/Ubuntu-MediumItalic.ttf"
+            halign: "center"
+            valign: "center" 
+
+        # end of LABEL"s
+
+        # TEXTINPUT"s
+
+        AccountTextInput:
+            id: login_email
+            text: "Type your Email"
+            pos_hint: {"x": .2, "top": .78}
+        
+        AccountTextInput:
+            id: login_password
+            password: True if self.text != "Type your Password" else False
+            text: "Type your Password"
+            pos_hint: {"x": .2, "top": .64}
+
+        # end of TEXTINPUT"s
+
+        # BUTTON"s
+
+        RoundedButton:
+            size_hint: (.6, .06) if self.state == "normal" else (.62, .08)
+            pos_hint: {"x": .2, "top": .5} if self.state == "normal" else {"x": .19, "top": .51}
+            text: "Sign in with Email"
+            back_color: hex("#3B5999") if self.state == "normal" else hex("#5E7DC1")
+            
+        RoundedButton:
+            size_hint: (.6, .06) if self.state == "normal" else (.62, .08)
+            pos_hint: {"x": .2, "top": .42} if self.state == "normal" else {"x": .19, "top": .43}
+            text: "Continue as Guest"
+            back_color: hex("#DD4B39") if self.state == "normal" else hex("#E6786B")
+
+        RoundedButton:
+            size_hint: (.6, .06) if self.state == "normal" else (.62, .08)
+            pos_hint: {"x": .2, "top": .28} if self.state == "normal" else {"x": .19, "top": .29}
+            text: "Create an free account"
+            back_color: hex("#97C432") if self.state == "normal" else hex("#B3D761")
+            on_release: 
+                root.proceed_to_create_acc()
+
+        ExitButton:
+            background_color: hex("#00000000")
+
+        # end of BUTTON"s
+
+<AccountTextInput@TextInput>:
+    size_hint: .6, .05
+    multiline: False
+    font_size: 28
+    default_color: True
+    background_active: ""
+    background_normal: ""
+    background_color: hex("#FFFEF9")
+    foreground_color: hex("#AAAAAA") if self.default_color else hex("#000000")
+    padding: [10, (self.height-self.line_height) / 2]
+    canvas.before:
+        Color:
+            rgba: hex("#000000") if self.focus else hex("#AAAAAA")
+        Line:
+            width: 1.8 if self.focus else 1.5
+            points: [self.x, self.y, self.right, self.y]
+
+<RoundedButton@Button>:
+    font_size: 32
+    font_name: "fonts/OpenSans-Regular.ttf"
+    background_color: 0, 0, 0, 0
+    background_normal: ""
+    back_color: 0, 0, 0, 0
+    canvas.before:
+        Color:
+            rgba: self.back_color
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: [15]
+
+<AccountLabel@Label>:
+    size_hint: .6, .03
+    text_size: self.size
+    color: hex("#000000")
+
+<CreateAccountScreen>:
+    name: "createAccount"
+    id: create_account
+
+    create_acc_username: create_acc_username
+    create_acc_email: create_acc_email
+    create_acc_password: create_acc_password
+
+    canvas.before:
+        Color:
+            rgba: hex("#FFFEF9")
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    FloatLayout:
+        AccountLabel:
+            text: "Username"
+            pos_hint: {"x": .2, "top": .83}
+            font_size: 24
+            halign: "left"
+            valign: "bottom"
+
+        AccountLabel:
+            text: "Email"
+            pos_hint: {"x": .2, "top": .69}
+            font_size: 24
+            halign: "left"
+            valign: "bottom"
+
+        AccountLabel:
+            text: "Password"
+            pos_hint: {"x": .2, "top": .55}
+            font_size: 24
+            halign: "left"
+            valign: "bottom"
+
+        AccountTextInput:
+            id: create_acc_username
+            text: "Type your Username"
+            pos_hint: {"x": .2, "top": .78}
+        
+        AccountTextInput:
+            id: create_acc_email
+            text: "Type your Email"
+            pos_hint: {"x": .2, "top": .64}
+
+        AccountTextInput:
+            id: create_acc_password
+            password: True if self.text != "Type your Password" else False
+            text: "Type your Password"
+            pos_hint: {"x": .2, "top": .5}
+
+        RoundedButton:
+            size_hint: (.2, .06) if self.state == "normal" else (.22, .08)
+            pos_hint: {"x": .25, "top": .4} if self.state == "normal" else {"x": .24, "top": .41}
+            text: "Submit"
+            back_color: hex("#3B5999") if self.state == "normal" else hex("#5E7DC1")
+
+        RoundedButton:
+            size_hint: (.2, .06) if self.state == "normal" else (.22, .08)
+            pos_hint: {"right": .75, "top": .4} if self.state == "normal" else {"right": .76, "top": .41}
+            text: "Clear"
+            back_color: hex("#3B5999") if self.state == "normal" else hex("#5E7DC1")
+            on_release:
+                root.clear_form()
+
+        ExitButton:
+            background_color: hex("#00000000")
+
+<SearchScreen>:
+    name: "search"
+    id: search_screen
+
+<ResultsScreen>:
+    name: "results"
+    id: result_screen
+
+<ExitButton@Button>:
+    size_hint: None, None
+    width: 100 if self.state == "normal" else 120
+    height: 100 if self.state == "normal" else 120
+    pos_hint: {"x": .05, "y": ((.05 * root.width) / root.height)}
+    canvas.before:
+        RoundedRectangle:
+            source: "drawings/exit_btn.png"
+            size: self.size
+            pos: self.pos
+            radius: [20]
+    on_release:
+        app.stop()
