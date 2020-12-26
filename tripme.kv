@@ -7,6 +7,17 @@
 <Label>:
     color: colors["paletteTextPrimary"]
 
+<InputLabel@Label>:
+    size_hint: .6, .03
+    text_size: self.size
+    font_name: "fonts/OpenSans-Regular.ttf"
+
+<InvalidFormatLabel@InputLabel>:
+    color: colors["paletteRedNormal"]
+    font_size: 20
+    valign: "top"
+    haligh: "left"
+
 <DescriptionLabel@Label>:
     pos_hint: {"x": .2, "top": 1}
     size_hint: .6, .17
@@ -16,16 +27,20 @@
     halign: "center"
     valign: "center"
 
-<AccountLabel@Label>:
-    size_hint: .6, .03
+<GreetingLabel@Label>:
+    size_hint: .9, .1
+    pos_hint: {"x": .05, "top": 1}
     text_size: self.size
-    font_name: "fonts/OpenSans-Regular.ttf"
+    font_size: 30
+    font_name: "fonts/WorkSans-Regular.ttf"
+    halign: "center"
+    valign: "center"
 
 ##### END OF LABEL PART #####
 
 ##### TEXTINPUT PART #####
 
-<AccountTextInput@TextInput>:
+<TextInput>:
     size_hint: .6, .05
     multiline: False
     font_size: 28
@@ -99,33 +114,33 @@
         DescriptionLabel:
             text: "Login"
 
-        AccountLabel:
+        InputLabel:
             text: "Email"
             pos_hint: {"x": .2, "top": .83}
             font_size: 24
             halign: "left"
             valign: "bottom"
 
-        AccountLabel:
+        InputLabel:
             text: "Password"
             pos_hint: {"x": .2, "top": .69}
             font_size: 24
             halign: "left"
             valign: "bottom"
 
-        AccountLabel:
+        InputLabel:
             text: "- or -"
             pos_hint: {"x": .2, "top": .335} 
             font_name: "fonts/Ubuntu-MediumItalic.ttf"
             halign: "center"
             valign: "center" 
 
-        AccountTextInput:
+        TextInput:
             id: login_email
             text: "Type your Email"
             pos_hint: {"x": .2, "top": .78}
         
-        AccountTextInput:
+        TextInput:
             id: login_password
             password: True if self.text != "Type your Password" else False
             text: "Type your Password"
@@ -144,6 +159,8 @@
             text: "Continue as Guest"
             back_color: colors["paletteOrangeDark"] if self.state == "normal" else colors["paletteOrangeNormal"]
             color: colors["paletteCloudLight"]
+            on_release:
+                root.proceed_to_search_screen()
 
         RoundedButton:
             size_hint: (.6, .06) if self.state == "normal" else (.62, .08)
@@ -152,7 +169,7 @@
             back_color: colors["paletteProductDark"] if self.state == "normal" else colors["paletteProductNormal"]
             color: colors["paletteCloudLight"]
             on_release: 
-                root.proceed_to_create_acc_page()
+                root.proceed_to_create_acc_screen()
 
         ExitButton:
 
@@ -175,21 +192,21 @@
         DescriptionLabel:
             text: "Register"
 
-        AccountLabel:
+        InputLabel:
             text: "Username"
             pos_hint: {"x": .2, "top": .83}
             font_size: 24
             halign: "left"
             valign: "bottom"
 
-        AccountLabel:
+        InputLabel:
             text: "Email"
             pos_hint: {"x": .2, "top": .69}
             font_size: 24
             halign: "left"
             valign: "bottom"
 
-        AccountLabel:
+        InputLabel:
             text: "Password"
             pos_hint: {"x": .2, "top": .55}
             font_size: 24
@@ -207,19 +224,19 @@
             text_size: self.size
             font_name: "fonts/WorkSans-Regular.ttf"
             on_ref_press:
-                root.proceed_to_login_page()
+                root.proceed_to_login_screen()
 
-        AccountTextInput:
+        TextInput:
             id: create_acc_username
             text: "Type your Username"
             pos_hint: {"x": .2, "top": .78}
         
-        AccountTextInput:
+        TextInput:
             id: create_acc_email
             text: "Type your Email"
             pos_hint: {"x": .2, "top": .64}
 
-        AccountTextInput:
+        TextInput:
             id: create_acc_password
             password: True if self.text != "Type your Password" else False
             text: "Type your Password"
@@ -243,9 +260,120 @@
 
         ExitButton:
 
-<SearchScreen>:
+<SearchScreen@Screen>:
     name: "search"
     id: search_screen
+
+    dept_place: dept_place
+    dept_date: dept_date
+    arr_dest: arr_dest
+
+    FloatLayout:
+        GreetingLabel:
+            text: "Hello! Currently logged in as [font=fonts/WorkSans-SemiBold]User[/font]."
+            markup: True
+
+        DescriptionLabel:
+            text: "Find your trip!"
+            pos_hint: {"x": .05, "top": .9}
+            size_hint: .9, .12
+            valign: "top"
+
+        InputLabel:
+            text: "From"
+            pos_hint: {"x": .2, "top": .78}
+            font_size: 24
+            halign: "left"
+            valign: "bottom"
+            color: colors["paletteTextPrimary"] if not root.dept_place.is_empty else colors["paletteRedNormal"]
+
+        InputLabel:
+            text: "To"
+            pos_hint: {"x": .2, "top": .64}
+            font_size: 24
+            halign: "left"
+            valign: "bottom"
+            color: colors["paletteTextPrimary"] if not root.arr_dest.is_empty else colors["paletteRedNormal"]
+
+        InputLabel:
+            text: "Departure date"
+            pos_hint: {"x": .2, "top": .5}
+            font_size: 24
+            halign: "left"
+            valign: "bottom"
+            color: colors["paletteTextPrimary"] if not root.dept_date.invalid_format else colors["paletteRedNormal"]
+
+        InvalidFormatLabel:
+            text: "Departure place field can not be empty."
+            pos_hint: {"x": .2, "top": .68} 
+            opacity: 1 if root.dept_place.is_empty else 0
+
+        InvalidFormatLabel:
+            text: "Arrival destination field can not be empty."
+            pos_hint: {"x": .2, "top": .54} 
+            opacity: 1 if root.arr_dest.is_empty else 0
+
+        InvalidFormatLabel:
+            text: "Departure date is empty or in wrong format."
+            pos_hint: {"x": .2, "top": .4} 
+            opacity: 1 if root.dept_date.invalid_format else 0
+
+        TextInput:
+            id: dept_place
+            is_empty: False
+            text: "Type your departure place"
+            pos_hint: {"x": .2, "top": .74}
+            canvas.before:
+                Color:
+                    rgba: colors["paletteRedNormal"] if self.is_empty else self.foreground_color
+                Line:
+                    width: 1.8 if self.focus else 1.5
+                    points: [self.x, self.y, self.right, self.y]
+        
+        TextInput:
+            id: arr_dest
+            is_empty: False
+            text: "Type your arrival destination"
+            pos_hint: {"x": .2, "top": .6}
+            canvas.before:
+                Color:
+                    rgba: colors["paletteRedNormal"] if self.is_empty else self.foreground_color
+                Line:
+                    width: 1.8 if self.focus else 1.5
+                    points: [self.x, self.y, self.right, self.y]
+
+        TextInput:
+            id: dept_date
+            invalid_format: False
+            text: "DD/MM/YYYY"
+            pos_hint: {"x": .2, "top": .46}
+            canvas.before:
+                Color:
+                    rgba: colors["paletteRedNormal"] if self.invalid_format else self.foreground_color
+                Line:
+                    width: 1.8 if self.focus else 1.5
+                    points: [self.x, self.y, self.right, self.y]
+
+        RoundedButton:
+            size_hint: (.2, .06) if self.state == "normal" else (.22, .08)
+            pos_hint: {"x": .25, "top": .35} if self.state == "normal" else {"x": .24, "top": .36}
+            text: "Search"
+            back_color: colors["paletteProductDark"] if self.state == "normal" else colors["paletteProductNormal"]
+            color: colors["paletteCloudLight"]
+            on_release:
+                root.parse_date(root.dept_date.text)
+                root.validate_inputs()
+
+        RoundedButton:
+            size_hint: (.2, .06) if self.state == "normal" else (.22, .08)
+            pos_hint: {"right": .75, "top": .35} if self.state == "normal" else {"right": .76, "top": .36}
+            text: "Clear"
+            back_color: colors["paletteRedDark"] if self.state == "normal" else colors["paletteRedNormal"]
+            color: colors["paletteCloudLight"]
+            on_release:
+                root.clear_form()
+
+        ExitButton:
 
 <ResultsScreen>:
     name: "results"
