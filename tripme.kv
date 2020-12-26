@@ -1,5 +1,6 @@
 #:kivy 2.0.0
 #:import hex kivy.utils.get_color_from_hex
+#:import colors __main__.colors
 
 <LoginScreen>:
     name: "login"
@@ -10,7 +11,7 @@
 
     canvas.before:
         Color:
-            rgba: hex("#FFFEF9")
+            rgba: colors["paletteCloudLight"]
 
         Rectangle:
             pos: self.pos
@@ -20,6 +21,9 @@
         cols: 1
 
         # LABEL"s
+
+        DescriptionLabel:
+            text: "Login"
 
         AccountLabel:
             text: "Email"
@@ -65,24 +69,26 @@
             size_hint: (.6, .06) if self.state == "normal" else (.62, .08)
             pos_hint: {"x": .2, "top": .5} if self.state == "normal" else {"x": .19, "top": .51}
             text: "Sign in with Email"
-            back_color: hex("#3B5999") if self.state == "normal" else hex("#5E7DC1")
+            back_color: colors["paletteProductDark"] if self.state == "normal" else colors["paletteProductNormal"]
+            color: colors["paletteCloudLight"]
             
         RoundedButton:
             size_hint: (.6, .06) if self.state == "normal" else (.62, .08)
             pos_hint: {"x": .2, "top": .42} if self.state == "normal" else {"x": .19, "top": .43}
             text: "Continue as Guest"
-            back_color: hex("#DD4B39") if self.state == "normal" else hex("#E6786B")
+            back_color: colors["paletteOrangeDark"] if self.state == "normal" else colors["paletteOrangeNormal"]
+            color: colors["paletteCloudLight"]
 
         RoundedButton:
             size_hint: (.6, .06) if self.state == "normal" else (.62, .08)
             pos_hint: {"x": .2, "top": .28} if self.state == "normal" else {"x": .19, "top": .29}
             text: "Create an free account"
-            back_color: hex("#97C432") if self.state == "normal" else hex("#B3D761")
+            back_color: colors["paletteProductDark"] if self.state == "normal" else colors["paletteProductNormal"]
+            color: colors["paletteCloudLight"]
             on_release: 
-                root.proceed_to_create_acc()
+                root.proceed_to_create_acc_page()
 
         ExitButton:
-            background_color: hex("#00000000")
 
         # end of BUTTON"s
 
@@ -93,12 +99,10 @@
     default_color: True
     background_active: ""
     background_normal: ""
-    background_color: hex("#FFFEF9")
-    foreground_color: hex("#AAAAAA") if self.default_color else hex("#000000")
+    foreground_color: colors["paletteInkLight"] if self.default_color else colors["paletteInkNormal"]
+    background_color: colors["paletteCloudLight"]
     padding: [10, (self.height-self.line_height) / 2]
     canvas.before:
-        Color:
-            rgba: hex("#000000") if self.focus else hex("#AAAAAA")
         Line:
             width: 1.8 if self.focus else 1.5
             points: [self.x, self.y, self.right, self.y]
@@ -117,10 +121,22 @@
             pos: self.pos
             radius: [15]
 
+<Label>:
+    color: colors["paletteTextPrimary"]
+
+<DescriptionLabel@Label>:
+    pos_hint: {"x": .2, "top": 1}
+    size_hint: .6, .17
+    text_size: self.size
+    font_size: 55
+    font_name: "fonts/OpenSans-Bold.ttf"
+    halign: "center"
+    valign: "center"
+
 <AccountLabel@Label>:
     size_hint: .6, .03
     text_size: self.size
-    color: hex("#000000")
+    font_name: "fonts/OpenSans-Regular.ttf"
 
 <CreateAccountScreen>:
     name: "createAccount"
@@ -132,12 +148,15 @@
 
     canvas.before:
         Color:
-            rgba: hex("#FFFEF9")
+            rgba: colors["paletteCloudLight"]
         Rectangle:
             pos: self.pos
             size: self.size
 
     FloatLayout:
+        DescriptionLabel:
+            text: "Register"
+
         AccountLabel:
             text: "Username"
             pos_hint: {"x": .2, "top": .83}
@@ -159,6 +178,19 @@
             halign: "left"
             valign: "bottom"
 
+        Label:
+            text: "Already have an account? [ref=login][color=007F6D][size=30][font=fonts/WorkSans-SemiBold]Login[/font][/size][/color][/ref] instead."
+            markup: True
+            size_hint: .6, .1
+            pos_hint: {"x": .2, "top": .275}
+            halign: "center"
+            valign: "center"
+            font_size: 28
+            text_size: self.size
+            font_name: "fonts/WorkSans-Regular.ttf"
+            on_ref_press:
+                root.proceed_to_login_page()
+
         AccountTextInput:
             id: create_acc_username
             text: "Type your Username"
@@ -179,18 +211,19 @@
             size_hint: (.2, .06) if self.state == "normal" else (.22, .08)
             pos_hint: {"x": .25, "top": .4} if self.state == "normal" else {"x": .24, "top": .41}
             text: "Submit"
-            back_color: hex("#3B5999") if self.state == "normal" else hex("#5E7DC1")
+            back_color: colors["paletteProductDark"] if self.state == "normal" else colors["paletteProductNormal"]
+            color: colors["paletteCloudLight"]
 
         RoundedButton:
             size_hint: (.2, .06) if self.state == "normal" else (.22, .08)
             pos_hint: {"right": .75, "top": .4} if self.state == "normal" else {"right": .76, "top": .41}
             text: "Clear"
-            back_color: hex("#3B5999") if self.state == "normal" else hex("#5E7DC1")
+            back_color: colors["paletteRedDark"] if self.state == "normal" else colors["paletteRedNormal"]
+            color: colors["paletteCloudLight"]
             on_release:
                 root.clear_form()
 
         ExitButton:
-            background_color: hex("#00000000")
 
 <SearchScreen>:
     name: "search"
@@ -205,6 +238,7 @@
     width: 100 if self.state == "normal" else 120
     height: 100 if self.state == "normal" else 120
     pos_hint: {"x": .05, "y": ((.05 * root.width) / root.height)}
+    background_color: hex("#00000000")
     canvas.before:
         RoundedRectangle:
             source: "drawings/exit_btn.png"

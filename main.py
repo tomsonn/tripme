@@ -16,6 +16,23 @@ EMAIL_DEFAULT = 'Type your Email'
 PASSWORD_DEFAULT = 'Type your Password'
 USERNAME_DEFAULT = 'Type your Username'
 
+colors = {
+    'paletteWhite': get_color_from_hex('FFFFFF'),
+    'paletteCloudLight': get_color_from_hex('#F5F7F9'),
+    'paletteProductNormal': get_color_from_hex('#00A991'),
+    'paletteProductDark': get_color_from_hex('#007F6D'),
+    'paletteBlack': get_color_from_hex('#000000'),
+    'paletteInkLight': get_color_from_hex('#5F738C'),
+    'paletteInkNormal': get_color_from_hex('#252A31'),
+    'paletteTextPrimary': get_color_from_hex('#252A31'),
+    'paletteBlueNormal': get_color_from_hex('#0172CB'),
+    'paletteBlueLight': get_color_from_hex('#E8F4FD'),
+    'paletteRedDark': get_color_from_hex('#970C0C'),
+    'paletteRedNormal': get_color_from_hex('#D21C1C'),
+    'paletteOrangeDark': get_color_from_hex('#A25100'),
+    'paletteOrangeNormal': get_color_from_hex('#E98305')
+}
+
 
 class LoginScreen(Screen):
 
@@ -24,9 +41,6 @@ class LoginScreen(Screen):
 
         login_email = ObjectProperty()
         login_password = ObjectProperty()
-
-    def proceed_to_create_acc(self):
-        screen_manager.current = 'createAccount'
 
     def on_touch_up(self, touch):
         if self.ids.login_email.collide_point(*touch.pos):
@@ -50,6 +64,15 @@ class LoginScreen(Screen):
                 self.login_password.text = ''
         else:
             raise ValueError('Bad input parameter.')
+
+    def proceed_to_create_acc_page(self):
+        screen_manager.current = 'createAccount'
+
+        self.login_email.text = EMAIL_DEFAULT
+        self.login_password.text = PASSWORD_DEFAULT
+
+        self.login_email.default_color = True
+        self.login_password.default_color = True
 
 
 class CreateAccountScreen(Screen):
@@ -97,6 +120,16 @@ class CreateAccountScreen(Screen):
         self.create_acc_password.text = ''
         self.create_acc_username.text = ''
 
+    def proceed_to_login_page(self):
+        screen_manager.current = 'login'
+        self.create_acc_email.text = EMAIL_DEFAULT
+        self.create_acc_password.text = PASSWORD_DEFAULT
+        self.create_acc_username.text = USERNAME_DEFAULT
+
+        self.create_acc_email.default_color = True
+        self.create_acc_password.default_color = True
+        self.create_acc_username.default_color = True
+
 
 class SearchScreen(Screen):
     
@@ -114,12 +147,12 @@ class WindowManager(ScreenManager):
 
 # Load kivy style file in case kivy can not find it internally
 kv = Builder.load_file('tripme.kv')
-    
+
 screen_manager = WindowManager(transition=NoTransition())
 screens = [LoginScreen(name='login'),
-           CreateAccountScreen(name='createAccount'),
-           SearchScreen(name='search'),
-           ResultsScreen(name='results')]
+            CreateAccountScreen(name='createAccount'),
+            SearchScreen(name='search'),
+            ResultsScreen(name='results')]
 for screen in screens:
     screen_manager.add_widget(screen)
 
@@ -127,7 +160,7 @@ screen_manager.current = 'login'
 
 
 class TripmeApp(App):
-    title = 'tripme'
+    title = 'TripMe'
 
     def build(self):
         return screen_manager
