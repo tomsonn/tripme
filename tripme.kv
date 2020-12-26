@@ -2,13 +2,82 @@
 #:import hex kivy.utils.get_color_from_hex
 #:import colors __main__.colors
 
-<LoginScreen>:
-    name: "login"
-    id: login_screen
+##### LABEL PART #####
 
-    login_email: login_email
-    login_password: login_password
+<Label>:
+    color: colors["paletteTextPrimary"]
 
+<DescriptionLabel@Label>:
+    pos_hint: {"x": .2, "top": 1}
+    size_hint: .6, .17
+    text_size: self.size
+    font_size: 55
+    font_name: "fonts/OpenSans-Bold.ttf"
+    halign: "center"
+    valign: "center"
+
+<AccountLabel@Label>:
+    size_hint: .6, .03
+    text_size: self.size
+    font_name: "fonts/OpenSans-Regular.ttf"
+
+##### END OF LABEL PART #####
+
+##### TEXTINPUT PART #####
+
+<AccountTextInput@TextInput>:
+    size_hint: .6, .05
+    multiline: False
+    font_size: 28
+    default_color: True
+    background_active: ""
+    background_normal: ""
+    foreground_color: colors["paletteInkLight"] if self.default_color else colors["paletteInkNormal"]
+    background_color: colors["paletteCloudLight"]
+    padding: [10, (self.height-self.line_height) / 2]
+    canvas.before:
+        Line:
+            width: 1.8 if self.focus else 1.5
+            points: [self.x, self.y, self.right, self.y]
+
+##### END OF TEXTINPUT PART #####
+
+##### BUTTON PART #####
+
+<RoundedButton@Button>:
+    font_size: 32
+    font_name: "fonts/OpenSans-Regular.ttf"
+    background_color: 0, 0, 0, 0
+    background_normal: ""
+    back_color: 0, 0, 0, 0
+    canvas.before:
+        Color:
+            rgba: self.back_color
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: [15]
+
+<ExitButton@Button>:
+    size_hint: None, None
+    width: 100 if self.state == "normal" else 120
+    height: 100 if self.state == "normal" else 120
+    pos_hint: {"x": .05, "y": ((.05 * root.width) / root.height)}
+    background_color: hex("#00000000")
+    canvas.before:
+        RoundedRectangle:
+            source: "drawable/exit_btn.png"
+            size: self.size
+            pos: self.pos
+            radius: [20]
+    on_release:
+        app.stop()
+
+##### END OF BUTTON PART #####
+
+##### SCREEN PART #####
+
+<Screen>:
     canvas.before:
         Color:
             rgba: colors["paletteCloudLight"]
@@ -17,10 +86,15 @@
             pos: self.pos
             size: self.size
 
+<LoginScreen@Screen>:
+    name: "login"
+    id: login_screen
+
+    login_email: login_email
+    login_password: login_password
+
     FloatLayout:
         cols: 1
-
-        # LABEL"s
 
         DescriptionLabel:
             text: "Login"
@@ -46,10 +120,6 @@
             halign: "center"
             valign: "center" 
 
-        # end of LABEL"s
-
-        # TEXTINPUT"s
-
         AccountTextInput:
             id: login_email
             text: "Type your Email"
@@ -60,10 +130,6 @@
             password: True if self.text != "Type your Password" else False
             text: "Type your Password"
             pos_hint: {"x": .2, "top": .64}
-
-        # end of TEXTINPUT"s
-
-        # BUTTON"s
 
         RoundedButton:
             size_hint: (.6, .06) if self.state == "normal" else (.62, .08)
@@ -90,55 +156,7 @@
 
         ExitButton:
 
-        # end of BUTTON"s
-
-<AccountTextInput@TextInput>:
-    size_hint: .6, .05
-    multiline: False
-    font_size: 28
-    default_color: True
-    background_active: ""
-    background_normal: ""
-    foreground_color: colors["paletteInkLight"] if self.default_color else colors["paletteInkNormal"]
-    background_color: colors["paletteCloudLight"]
-    padding: [10, (self.height-self.line_height) / 2]
-    canvas.before:
-        Line:
-            width: 1.8 if self.focus else 1.5
-            points: [self.x, self.y, self.right, self.y]
-
-<RoundedButton@Button>:
-    font_size: 32
-    font_name: "fonts/OpenSans-Regular.ttf"
-    background_color: 0, 0, 0, 0
-    background_normal: ""
-    back_color: 0, 0, 0, 0
-    canvas.before:
-        Color:
-            rgba: self.back_color
-        RoundedRectangle:
-            size: self.size
-            pos: self.pos
-            radius: [15]
-
-<Label>:
-    color: colors["paletteTextPrimary"]
-
-<DescriptionLabel@Label>:
-    pos_hint: {"x": .2, "top": 1}
-    size_hint: .6, .17
-    text_size: self.size
-    font_size: 55
-    font_name: "fonts/OpenSans-Bold.ttf"
-    halign: "center"
-    valign: "center"
-
-<AccountLabel@Label>:
-    size_hint: .6, .03
-    text_size: self.size
-    font_name: "fonts/OpenSans-Regular.ttf"
-
-<CreateAccountScreen>:
+<CreateAccountScreen@Screen>:
     name: "createAccount"
     id: create_account
 
@@ -233,17 +251,4 @@
     name: "results"
     id: result_screen
 
-<ExitButton@Button>:
-    size_hint: None, None
-    width: 100 if self.state == "normal" else 120
-    height: 100 if self.state == "normal" else 120
-    pos_hint: {"x": .05, "y": ((.05 * root.width) / root.height)}
-    background_color: hex("#00000000")
-    canvas.before:
-        RoundedRectangle:
-            source: "drawings/exit_btn.png"
-            size: self.size
-            pos: self.pos
-            radius: [20]
-    on_release:
-        app.stop()
+##### END OF SCREEN PART #####
